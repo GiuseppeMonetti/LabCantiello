@@ -4,5 +4,5 @@
     <string name="title_activity_main">Map(p)</string>
     <string name="tab_principale">Vicino a me</string>
     <string name="tab_mappa">Nei dintorni</string>
-    <string name="tab_unknown">SCEM</string>
+    <string name="tab_unknown">Sconosciuto</string>
 </resources>

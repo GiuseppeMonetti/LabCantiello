@@ -42,7 +42,6 @@ public class PagerAdapter extends FragmentPagerAdapter {
                 return null;
         }
     }
-
     /**
      * Restituisce il numero di fragment totali
      * @return numero di fragment
@@ -51,7 +50,6 @@ public class PagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return numeroDiTab;
     }
-
     /**
      * Restituisce l'id della risorsa con il nome del tab da mettere nel menu
      * @param position indice della posizione
