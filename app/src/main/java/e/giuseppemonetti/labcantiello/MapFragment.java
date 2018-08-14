@@ -142,6 +142,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
+        
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                marker.setTitle("sort");
+            }
+        });
+
+
         mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
             @Override
             public boolean onMyLocationButtonClick() {
