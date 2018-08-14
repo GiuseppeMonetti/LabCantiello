@@ -19,6 +19,7 @@ public class Categoria {
         return nomeCategoria;
     }
 
+    public int getKey() {return key;}
 
 
 }

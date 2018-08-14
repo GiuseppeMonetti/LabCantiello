@@ -2,6 +2,7 @@ package e.giuseppemonetti.labcantiello;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -13,6 +14,7 @@ public class RigaCategoria extends AppCompatActivity {
 
 
     private TextView vTextCategoria;
+    private ImageView vIcona;
 
 
     @Override
@@ -20,5 +22,6 @@ public class RigaCategoria extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_categoria);
         vTextCategoria = findViewById(R.id.textCategoria);
+        vIcona = findViewById(R.id.icona);
     }
 }

@@ -7,26 +7,24 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textCategoria"
+        android:id="@+id/textAttrazione"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/icona"
-        app:layout_constraintStart_toEndOf="@+id/icona"
-        app:layout_constraintTop_toTopOf="@+id/icona" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/icona"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+    <TextView
+        android:id="@+id/textDistanza"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:color/transparent" />
-
+        app:layout_constraintTop_toBottomOf="@+id/textAttrazione" />
 </android.support.constraint.ConstraintLayout>

@@ -5,4 +5,7 @@
     <string name="tab_principale">Vicino a me</string>
     <string name="tab_mappa">Nei dintorni</string>
     <string name="tab_unknown">Sconosciuto</string>
+    <string name="msg_position">Mi trovo qui!</string>
+    <string name="msg_findposition">Attendi che la posizione venga calcolata.</string>
+    <string name="position_wait">Sto cercando la posizione...</string>
 </resources>

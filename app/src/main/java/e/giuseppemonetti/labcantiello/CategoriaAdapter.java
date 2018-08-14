@@ -1,12 +1,15 @@
 package e.giuseppemonetti.labcantiello;
 
 import android.content.Context;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,10 +55,17 @@ public class CategoriaAdapter extends BaseAdapter {
 
         //ottengo il nome completo corrente
         TextView vNomeCat = view.findViewById(R.id.textCategoria);
+        ImageView vIcona = (ImageView) view.findViewById(R.id.icona);
 
         //imposto i valori da visualizzare
-        Categoria c = elencoCategorie.get(i);
-        vNomeCat.setText(c.getNomeCategoria());
+        for(Categoria c : elencoCategorie)
+        {
+            if(c.getKey()== i) vNomeCat.setText(c.getNomeCategoria());
+        }
+
+
+
+        vIcona.setImageResource(getId("icon" + i, R.drawable.class));
 
 
         return view;
@@ -66,5 +76,18 @@ public class CategoriaAdapter extends BaseAdapter {
         this.elencoCategorie=elencoCategorie;
         notifyDataSetChanged();
     }
+
+
+    // CI RESTITUISCE L'ID DELLA RISORSA
+    public static int getId(String resourceName, Class<?> c) {
+        try {
+            Field idField = c.getDeclaredField(resourceName);
+            return idField.getInt(idField);
+        } catch (Exception e) {
+            throw new RuntimeException("No resource ID found for: "
+                    + resourceName + " / " + c, e);
+        }
+    }
+
 
 }
