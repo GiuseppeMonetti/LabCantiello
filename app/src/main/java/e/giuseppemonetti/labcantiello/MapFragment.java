@@ -2,6 +2,7 @@ package e.giuseppemonetti.labcantiello;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -41,6 +43,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private Marker mark;
     private LatLng latLng;
     private Location loc;
+    private Circle c;
 
     public MapFragment() {
         //EMPTY SORT CONSTRUCTOR
@@ -104,52 +107,59 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        loc = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        final LatLng centercamera = new LatLng(loc.getLatitude(),loc.getLongitude());
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centercamera,(float)13.3));
-        Circle c = mMap.addCircle(new CircleOptions()
-                .center(centercamera)
-                .radius(2000)
-                .strokeColor(Color.RED)
-                .fillColor(0x220000FF)
-                .strokeWidth(1)
-        );
+        loc = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        final LatLng centercamera;
+        if( loc != null) {
+            centercamera = new LatLng(loc.getLatitude(), loc.getLongitude());
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centercamera, (float) 13.3));
+            c = mMap.addCircle(new CircleOptions()
+                    .center(centercamera)
+                    .radius(2000)
+                    .strokeColor(Color.RED)
+                    .fillColor(0x220000FF)
+                    .strokeWidth(1)
+            );
 
-        da.iniziaOsservazioneMap(loc, new DatiAttrazione.UpdateListener2() {
-            @Override
-            public void listAttrazioniAggiornate() {
-                List<Attrazione> list = da.getAttrazioniPerMap();
-                for (int i = 0; i < list.size(); i++) {
-                    switch (list.get(i).getCategoria()) {
-                        case "Bar & Pub":
-                            mMap.addMarker(new MarkerOptions().position(new LatLng(list.get(i).getLat(), list.get(i).getLng())).title(list.get(i).getNome())
-                                    .icon(getMarkerIcon("#325438")));
-                            break;
-                        case "Ristoranti & Pizzerie":
-                            mMap.addMarker(new MarkerOptions().position(new LatLng(list.get(i).getLat(), list.get(i).getLng())).title(list.get(i).getNome())
-                                    .icon(getMarkerIcon("#ff7100")));
-                            break;
-                        case "Cultura & Spettacolo":
-                            mMap.addMarker(new MarkerOptions().position(new LatLng(list.get(i).getLat(), list.get(i).getLng())).title(list.get(i).getNome())
-                                    .icon(getMarkerIcon("#2de5ff")));
-                            break;
-                        case "Cinema & Intrattenimento":
-                            mMap.addMarker(new MarkerOptions().position(new LatLng(list.get(i).getLat(), list.get(i).getLng())).title(list.get(i).getNome())
-                                    .icon(getMarkerIcon("#ffe200")));
-                            break;
+            da.iniziaOsservazioneMap(loc, new DatiAttrazione.UpdateListener2() {
+                @Override
+                public void listAttrazioniAggiornate() {
+                    List<Attrazione> list = da.getAttrazioniPerMap();
+                    for (int i = 0; i < list.size(); i++) {
+                        switch (list.get(i).getCategoria()) {
+                            case "Bar & Pub":
+                                mMap.addMarker(new MarkerOptions().position(new LatLng(list.get(i).getLat(), list.get(i).getLng())).title(list.get(i).getNome())
+                                        .icon(getMarkerIcon("#325438")));
+                                break;
+                            case "Ristoranti & Pizzerie":
+                                mMap.addMarker(new MarkerOptions().position(new LatLng(list.get(i).getLat(), list.get(i).getLng())).title(list.get(i).getNome())
+                                        .icon(getMarkerIcon("#ff7100")));
+                                break;
+                            case "Cultura & Spettacolo":
+                                mMap.addMarker(new MarkerOptions().position(new LatLng(list.get(i).getLat(), list.get(i).getLng())).title(list.get(i).getNome())
+                                        .icon(getMarkerIcon("#2de5ff")));
+                                break;
+                            case "Cinema & Intrattenimento":
+                                mMap.addMarker(new MarkerOptions().position(new LatLng(list.get(i).getLat(), list.get(i).getLng())).title(list.get(i).getNome())
+                                        .icon(getMarkerIcon("#ffe200")));
+                                break;
+                        }
                     }
                 }
-            }
-        });
+            });
 
-        
+            
+        }
+
+
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                marker.setTitle("sort");
+                if(marker.getTitle().equals("Mi trovo qui!")) return;
+                Intent intent = new Intent(getContext(),DettaglioActivity.class);
+                intent.putExtra("nomeattr",marker.getTitle());
+                startActivity(intent);
             }
         });
-
 
         mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
             @Override
@@ -179,15 +189,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
             @Override
             public void onMyLocationChange(Location location) {
-
                 if (mark != null) {mark.remove();}
                 double lat = location.getLatitude();
                 double lng = location.getLongitude();
                 loc = location;
                 latLng = new LatLng(lat, lng);
-
-
-
+                if(c != null) { c.remove(); }
+                c = mMap.addCircle(new CircleOptions()
+                                .center(latLng)
+                                .radius(2000)
+                                .strokeColor(Color.RED)
+                                .fillColor(0x220000FF)
+                                .strokeWidth(1)
+                );
                 mark = mMap.addMarker(new MarkerOptions().position(latLng).title(getResources().getString(R.string.msg_position)));
                 //  myself.setDraggable(true);
                // mMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));

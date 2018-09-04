@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -29,8 +30,8 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     private TextView vMyposition;
-    private String city = null;
-    static private LatLng latlng;
+    private static String city = null;
+    static private LatLng latlng = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,16 +75,18 @@ public class MainActivity extends AppCompatActivity {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        Location l = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        latlng = new LatLng(l.getLatitude(),l.getLongitude());
-
-        Geocoder geocoder = new Geocoder(MainActivity.this,Locale.getDefault());
-        try {
-            List<Address> indirizzi = geocoder.getFromLocation(l.getLatitude(), l.getLongitude(), 1);
-            city = indirizzi.get(0).getLocality();
-            vMyposition.setText(indirizzi.get(0).getLocality() + ", " + indirizzi.get(0).getSubAdminArea() + ", " + indirizzi.get(0).getPostalCode());
-        } catch (IOException e) {
-            e.printStackTrace();
+        Location l = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        if (l != null)
+        {
+            latlng = new LatLng(l.getLatitude(),l.getLongitude());
+            Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
+            try {
+                List<Address> indirizzi = geocoder.getFromLocation(l.getLatitude(), l.getLongitude(), 1);
+                city = indirizzi.get(0).getLocality();
+                vMyposition.setText(indirizzi.get(0).getLocality() + ", " + indirizzi.get(0).getSubAdminArea() + ", " + indirizzi.get(0).getPostalCode());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -121,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
 
-    public String getCity(){return city;}
+    static public String getCity(){return city;}
     static public LatLng getLatlng(){return latlng;}
 
 
@@ -161,5 +164,20 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == MainFragment.REQUEST_ADDING_ATTRACTION) {
+
+
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(this, R.string.addOk, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 }

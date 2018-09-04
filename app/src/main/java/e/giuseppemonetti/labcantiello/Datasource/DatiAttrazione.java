@@ -46,7 +46,7 @@ public class DatiAttrazione extends Fragment {
 
 
     //abbiamo creato il DatiAttrazione
-    private Hashtable<Integer,Attrazione> elencoAttrazioni;
+    private ArrayList<Attrazione> elencoAttrazioni;
     private ArrayList<Attrazione> attrazioniPerMap;
 
     private static e.giuseppemonetti.labcantiello.Datasource.DatiAttrazione istance = null;
@@ -59,7 +59,7 @@ public class DatiAttrazione extends Fragment {
 
     //Costruttore DatiAttrazione
     public DatiAttrazione(){
-        elencoAttrazioni = new Hashtable<>();
+        elencoAttrazioni = new ArrayList<>();
         attrazioniPerMap = new ArrayList<>();
     }
 
@@ -75,8 +75,12 @@ public class DatiAttrazione extends Fragment {
                 elencoAttrazioni.clear();
                 for (DataSnapshot elemento:dataSnapshot.child(city).child(categoria).getChildren())
                 {
-                    Attrazione a = new Attrazione(elemento.getValue(String.class),Integer.parseInt(elemento.getKey()));
-                    elencoAttrazioni.put(Integer.parseInt(elemento.getKey()),a);
+                    String nome = elemento.getValue(String.class);
+                    String descrizione = dataSnapshot.child("Coordinate").child(nome).child("descrizione").getValue(String.class);
+                    String email = dataSnapshot.child("Coordinate").child(nome).child("email").getValue(String.class);
+                    String recapito = dataSnapshot.child("Coordinate").child(nome).child("rec").getValue(String.class);
+                    Attrazione a = new Attrazione(nome,descrizione,recapito,categoria);
+                    elencoAttrazioni.add(a);
                 }
                 for(int i = 0; i < elencoAttrazioni.size();i++)
                 {
@@ -124,7 +128,6 @@ public class DatiAttrazione extends Fragment {
                 {
                     l2 = new Location("");
                     l2.setLatitude(elemento.child("lat").getValue(double.class));
-                    Log.i("ciao"," " + l2.getLatitude());
                     l2.setLongitude(elemento.child("lng").getValue(double.class));
                     if(l2.distanceTo(l1)<2000)
                     {
@@ -164,21 +167,7 @@ public class DatiAttrazione extends Fragment {
     }
 
 
-    public Attrazione getAttrazione(int numAtt){
-        return elencoAttrazioni.get(numAtt);
-    }
-
-    public ArrayList<Attrazione> getElencoAttrazioni()
-    {
-        ArrayList<Attrazione> risultato = new ArrayList<Attrazione>();
-
-        //itero tutti gli elementi per aggiungerli alla lista creata
-        for(Map.Entry<Integer, Attrazione> elemento : elencoAttrazioni.entrySet())
-        {
-            risultato.add(elemento.getValue());
-        }
-        return risultato;
-    }
+    public ArrayList<Attrazione> getElencoAttrazioni() {return elencoAttrazioni;}
 
     public void setCity(String s){city = s;}
     public void setCategoria(String s){categoria = s;}

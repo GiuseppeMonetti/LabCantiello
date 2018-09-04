@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +17,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import e.giuseppemonetti.labcantiello.Datasource.DatiCategoria;
+
+import static android.app.Activity.RESULT_OK;
 
 
 /**
@@ -27,6 +33,8 @@ public class MainFragment extends Fragment {
     private ListView listaCat;
     private DatiCategoria dc;
     private CategoriaAdapter catAdapter;
+    private FloatingActionButton vFab;
+    final static int REQUEST_ADDING_ATTRACTION = 222;
 
     public MainFragment() {}
 
@@ -38,7 +46,7 @@ public class MainFragment extends Fragment {
 
 
         listaCat = view.findViewById(R.id.listaCategorie);
-
+        vFab = view.findViewById(R.id.fab);
         dc = DatiCategoria.getIstance();
 
         catAdapter = new CategoriaAdapter(this.getContext(),dc.getElencoCategorie());
@@ -56,8 +64,7 @@ public class MainFragment extends Fragment {
         listaCat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                MainActivity activity = (MainActivity) getActivity();
-                String city = activity.getCity();
+                String city = MainActivity.getCity();
                 if(city == null)
                 {
                     Toast t = Toast.makeText(getContext(),getResources().getString(R.string.msg_findposition),Toast.LENGTH_SHORT);
@@ -72,6 +79,27 @@ public class MainFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        vFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LatLng latLng = MainActivity.getLatlng();
+                String citta = MainActivity.getCity();
+                if(latLng != null) {
+                    Intent intent = new Intent(getContext(), AggiungiActivity.class);
+                    intent.putExtra("LAT", latLng.latitude);
+                    intent.putExtra("LNG", latLng.longitude);
+                    intent.putExtra("CITTA",citta);
+                startActivityForResult(intent,REQUEST_ADDING_ATTRACTION);
+                }
+                else{
+                    Toast t = Toast.makeText(getContext(),R.string.msg_findposition,Toast.LENGTH_SHORT);
+                }
+            }
+        });
+
+
+
 
         return view;
     }

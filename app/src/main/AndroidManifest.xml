@@ -39,7 +39,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".MapFragment" />
-        <activity android:name=".ListActivity"></activity>
+        <activity android:name=".ListActivity" />
+        <activity android:name=".DettaglioActivity" />
+        <activity android:name=".AggiungiActivity"></activity>
     </application>
 
 </manifest>

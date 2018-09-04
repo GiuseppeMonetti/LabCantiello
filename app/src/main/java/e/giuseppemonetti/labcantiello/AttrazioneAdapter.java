@@ -29,7 +29,6 @@ public class AttrazioneAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<Attrazione> elencoAttrazioni;
-    private Semaphore s;
 
     public AttrazioneAdapter(Context context, ArrayList<Attrazione> elencoAttrazioni) {
         this.context = context;
@@ -66,24 +65,14 @@ public class AttrazioneAdapter extends BaseAdapter {
         TextView vTextDistanza = view.findViewById(R.id.textDistanza);
 
         //imposto i valori da visualizzare
-        for(Attrazione a : elencoAttrazioni)
-        {
-            if(a.getKey()== i)
-            {
-                vTextAttrazione.setText(a.getNome());
-                Location l1 = new Location("");
-                l1.setLatitude(a.getLat());
-                l1.setLongitude(a.getLng());
-                Location l2 = new Location("");
-                l2.setLatitude(MainActivity.getLatlng().latitude);
-                l2.setLongitude(MainActivity.getLatlng().longitude);
-                vTextDistanza.setText("A " + String.format("%.2f",l1.distanceTo(l2)/1000) + " km da te.");
-            }
-        }
-
-
-
-
+        vTextAttrazione.setText(elencoAttrazioni.get(i).getNome());
+        Location l1 = new Location("");
+        l1.setLatitude(elencoAttrazioni.get(i).getLat());
+        l1.setLongitude(elencoAttrazioni.get(i).getLng());
+        Location l2 = new Location("");
+        l2.setLatitude(MainActivity.getLatlng().latitude);
+        l2.setLongitude(MainActivity.getLatlng().longitude);
+        vTextDistanza.setText("A " + String.format("%.2f",l1.distanceTo(l2)/1000) + " km da te.");
 
         return view;
     }

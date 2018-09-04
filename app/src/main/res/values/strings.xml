@@ -8,4 +8,14 @@
     <string name="msg_position">Mi trovo qui!</string>
     <string name="msg_findposition">Attendi che la posizione venga calcolata.</string>
     <string name="position_wait">Sto cercando la posizione...</string>
+    <string name="numero_attrazione">Recapito</string>
+    <string name="email_attrazione">E-mail</string>
+    <string name="Description">Descrizione</string>
+    <string name="email">Email</string>
+    <string name="Categories">Categorie</string>
+    <string name="telNumber">Recapito</string>
+    <string name="err">Non sono stati inseriti tutti i parametri richiesti</string>
+    <string name="LocName">Nome</string>
+    <string name="Name">Nome</string>
+    <string name="addOk">Aggiunta avvenuta con successo</string>
 </resources>

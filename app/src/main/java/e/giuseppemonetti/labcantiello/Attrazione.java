@@ -8,12 +8,16 @@ public class Attrazione {
     private String nome;
     private Double lat;
     private Double lng;
-    private int key;
     private String categoria;
+    private String descrizione;
+    private String recapito;
+    private String mail;
 
-    public Attrazione(String nome, int key) {
+    public Attrazione(String nome, String descrizione, String recapito, String categoria) {
         this.nome = nome;
-        this.key = key;
+        this.descrizione = descrizione;
+        this.recapito = recapito;
+        this.categoria = categoria;
     }
 
     public Attrazione(String nome, Double lat, Double lng)
@@ -32,7 +36,6 @@ public class Attrazione {
     public String getNome(){ return nome;}
     public Double getLat(){ return lat;}
     public Double getLng(){ return lng;}
-    public int getKey(){return key;}
     public String getCategoria(){ return categoria;}
     public void setCategoria(String c){ categoria=c;}
 
