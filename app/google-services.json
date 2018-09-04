@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "954825559054",
+    "firebase_url": "https://mapp-cfbbf.firebaseio.com",
+    "project_id": "mapp-cfbbf",
+    "storage_bucket": "mapp-cfbbf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:954825559054:android:474ad9f4248ee08b",
+        "android_client_info": {
+          "package_name": "e.giuseppemonetti.labcantiello"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "954825559054-vdk4khtuhec7ap0tob1bmbu0b0g6h2cj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3VamdJsEfXzqlHMFPJ2SAjjWcyaEpeYQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
