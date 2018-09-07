@@ -56,7 +56,7 @@ public class DatiCategoria extends Fragment {
                 elencoCategorie.clear();
                 for (DataSnapshot elemento:dataSnapshot.getChildren())
                 {
-                    Categoria c = new Categoria(elemento.getValue(String.class),Integer.parseInt(elemento.getKey()));
+                    Categoria c = new Categoria(elemento.child("nome").getValue(String.class),Integer.parseInt(elemento.getKey()),elemento.child("icon").getValue(String.class));
                     elencoCategorie.put(c.getKey(),c);
                 }
                 notifica.eventiAggiornati();

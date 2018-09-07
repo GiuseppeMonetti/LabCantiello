@@ -79,16 +79,14 @@ public class AggiungiActivity extends AppCompatActivity {
                 db.push().setValue(nome);
 
                 DatabaseReference db2 = database.getReference("Coordinate");
-                db2.child(nome).child("cat").setValue(trovaIdCat());
+                db2.child(nome).child("cat").setValue(trovaIdCat(categoria));
                 db2.child(nome).child("descrizione").setValue(descrizione);
                 db2.child(nome).child("email").setValue(mail);
                 db2.child(nome).child("rec").setValue(recapito);
                 db2.child(nome).child("lat").setValue(getIntent().getDoubleExtra("LAT",0));
                 db2.child(nome).child("lng").setValue(getIntent().getDoubleExtra("LNG",0));
 
-                Log.i("FAMM CAPI","cosa accade");
-                Intent i = new Intent();
-                setResult(RESULT_OK,i);
+                Toast.makeText(getApplicationContext(),R.string.addOk,Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -143,7 +141,7 @@ public class AggiungiActivity extends AppCompatActivity {
 
 
 
-    public int trovaIdCat()
+    public static int trovaIdCat(String categoria)
     {
         if(categoria.equals("Bar & Pub")) return 0;
         if(categoria.equals("Ristoranti & Pizzerie")) return 1;

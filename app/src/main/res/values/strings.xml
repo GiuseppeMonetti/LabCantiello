@@ -17,5 +17,5 @@
     <string name="err">Non sono stati inseriti tutti i parametri richiesti</string>
     <string name="LocName">Nome</string>
     <string name="Name">Nome</string>
-    <string name="addOk">Aggiunta avvenuta con successo</string>
+    <string name="addOk">Aggiunta avvenuta con successo!</string>
 </resources>

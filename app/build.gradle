@@ -1,3 +1,4 @@
+//noinspection GradleCompatible
 apply plugin: 'com.android.application'
 
 android {
@@ -20,9 +21,10 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.google.android.gms:play-services-maps:10.2.1'
-    implementation 'com.android.support:support-annotations:27.1.1'
+    implementation 'com.android.support:support-annotations:26.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -30,6 +32,8 @@ dependencies {
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.google.firebase:firebase-core:10.2.1'
     implementation 'com.google.firebase:firebase-database:10.2.1'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
     //  implementation 'com.google.android.gms:play-services-measurement-base:15.0.4'
     //  implementation 'com.google.firebase:firebase-analytics:16.0.1'
     //  implementation 'com.google.firebase:firebase-analytics-impl:16.1.1'

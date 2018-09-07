@@ -40,7 +40,7 @@ public class ListActivity extends AppCompatActivity {
 
         da.iniziaOsservazioneEventi(new DatiAttrazione.UpdateListener() {
             @Override
-            public void eventiAggiornati() {
+            public void listAttrazioniAggiornate() {
                 actAdapter.update(da.getElencoAttrazioni());
             }
         });

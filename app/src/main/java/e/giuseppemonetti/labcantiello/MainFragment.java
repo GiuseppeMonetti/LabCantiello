@@ -90,10 +90,11 @@ public class MainFragment extends Fragment {
                     intent.putExtra("LAT", latLng.latitude);
                     intent.putExtra("LNG", latLng.longitude);
                     intent.putExtra("CITTA",citta);
-                startActivityForResult(intent,REQUEST_ADDING_ATTRACTION);
+                startActivity(intent);
                 }
                 else{
-                    Toast t = Toast.makeText(getContext(),R.string.msg_findposition,Toast.LENGTH_SHORT);
+                    Toast t = Toast.makeText(getActivity(),R.string.msg_findposition,Toast.LENGTH_SHORT);
+                    t.show();
                 }
             }
         });

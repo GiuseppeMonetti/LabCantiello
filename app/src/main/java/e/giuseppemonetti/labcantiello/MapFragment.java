@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -30,6 +31,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import e.giuseppemonetti.labcantiello.Datasource.DatiAttrazione;
@@ -40,10 +42,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private SupportMapFragment suppMap;
-    private Marker mark;
+    private Marker myMark;
     private LatLng latLng;
     private Location loc;
     private Circle c;
+    private ArrayList<Marker> marks = new ArrayList<Marker>();
 
     public MapFragment() {
         //EMPTY SORT CONSTRUCTOR
@@ -107,7 +110,84 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        loc = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        LocationListener loclistener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                if (myMark != null) {
+                    myMark.remove();
+                }
+
+                //RIMUOVIAMO I VECCHI MARKER E METTIAMO I NUOVI
+                if (marks != null) {
+                    for (int i = 0; i < marks.size(); i++) {
+                        marks.get(i).remove();
+                    }
+                }
+
+                double lat = location.getLatitude();
+                double lng = location.getLongitude();
+                loc = location;
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat,lng), (float) 13.3));
+                latLng = new LatLng(lat, lng);
+                if (c != null) {
+                    c.remove();
+                }
+                c = mMap.addCircle(new CircleOptions()
+                        .center(latLng)
+                        .radius(2000)
+                        .strokeColor(Color.RED)
+                        .fillColor(0x220000FF)
+                        .strokeWidth(1)
+                );
+                if(isAdded()) myMark = mMap.addMarker(new MarkerOptions().position(latLng).title(getResources().getString(R.string.msg_position)));
+
+                da.iniziaOsservazioneMap(loc, new DatiAttrazione.UpdateListener() {
+                    @Override
+                    public void listAttrazioniAggiornate() {
+                        List<Attrazione> list = da.getAttrazioniPerMap();
+                        Marker e = null;
+                        for (int i = 0; i < list.size(); i++) {
+                            switch (list.get(i).getCategoria()) {
+                                case "Bar & Pub":
+                                    e = mMap.addMarker(new MarkerOptions().position(new LatLng(list.get(i).getLat(), list.get(i).getLng())).title(list.get(i).getNome())
+                                            .icon(getMarkerIcon("#325438")));
+                                    break;
+                                case "Ristoranti & Pizzerie":
+                                    e = mMap.addMarker(new MarkerOptions().position(new LatLng(list.get(i).getLat(), list.get(i).getLng())).title(list.get(i).getNome())
+                                            .icon(getMarkerIcon("#ff7100")));
+                                    break;
+                                case "Cultura & Spettacolo":
+                                    e = mMap.addMarker(new MarkerOptions().position(new LatLng(list.get(i).getLat(), list.get(i).getLng())).title(list.get(i).getNome())
+                                            .icon(getMarkerIcon("#2de5ff")));
+                                    break;
+                                case "Cinema & Intrattenimento":
+                                    e = mMap.addMarker(new MarkerOptions().position(new LatLng(list.get(i).getLat(), list.get(i).getLng())).title(list.get(i).getNome())
+                                            .icon(getMarkerIcon("#ffe200")));
+                                    break;
+                            }
+                            marks.add(e);
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        };
+        loc = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,30000,5000,loclistener);
         final LatLng centercamera;
         if( loc != null) {
             centercamera = new LatLng(loc.getLatitude(), loc.getLongitude());
@@ -120,29 +200,31 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     .strokeWidth(1)
             );
 
-            da.iniziaOsservazioneMap(loc, new DatiAttrazione.UpdateListener2() {
+            da.iniziaOsservazioneMap(loc, new DatiAttrazione.UpdateListener() {
                 @Override
                 public void listAttrazioniAggiornate() {
                     List<Attrazione> list = da.getAttrazioniPerMap();
+                    Marker e = null;
                     for (int i = 0; i < list.size(); i++) {
                         switch (list.get(i).getCategoria()) {
                             case "Bar & Pub":
-                                mMap.addMarker(new MarkerOptions().position(new LatLng(list.get(i).getLat(), list.get(i).getLng())).title(list.get(i).getNome())
+                                e = mMap.addMarker(new MarkerOptions().position(new LatLng(list.get(i).getLat(), list.get(i).getLng())).title(list.get(i).getNome())
                                         .icon(getMarkerIcon("#325438")));
                                 break;
                             case "Ristoranti & Pizzerie":
-                                mMap.addMarker(new MarkerOptions().position(new LatLng(list.get(i).getLat(), list.get(i).getLng())).title(list.get(i).getNome())
+                                e = mMap.addMarker(new MarkerOptions().position(new LatLng(list.get(i).getLat(), list.get(i).getLng())).title(list.get(i).getNome())
                                         .icon(getMarkerIcon("#ff7100")));
                                 break;
                             case "Cultura & Spettacolo":
-                                mMap.addMarker(new MarkerOptions().position(new LatLng(list.get(i).getLat(), list.get(i).getLng())).title(list.get(i).getNome())
+                                e = mMap.addMarker(new MarkerOptions().position(new LatLng(list.get(i).getLat(), list.get(i).getLng())).title(list.get(i).getNome())
                                         .icon(getMarkerIcon("#2de5ff")));
                                 break;
                             case "Cinema & Intrattenimento":
-                                mMap.addMarker(new MarkerOptions().position(new LatLng(list.get(i).getLat(), list.get(i).getLng())).title(list.get(i).getNome())
+                                e = mMap.addMarker(new MarkerOptions().position(new LatLng(list.get(i).getLat(), list.get(i).getLng())).title(list.get(i).getNome())
                                         .icon(getMarkerIcon("#ffe200")));
                                 break;
                         }
+                        marks.add(e);
                     }
                 }
             });
@@ -185,11 +267,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
 
+        /*
         mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
 
             @Override
             public void onMyLocationChange(Location location) {
-                if (mark != null) {mark.remove();}
+                if (myMark != null) {
+                    myMark.remove();
+                }
+
+                //RIMUOVIAMO I VECCHI MARKER E METTIAMO I NUOVI
+                if(marks!= null){
+                    for (int i = 0; i < marks.size(); i++) {
+                        marks.get(i).remove();
+                    }
+                }
+
                 double lat = location.getLatitude();
                 double lng = location.getLongitude();
                 loc = location;
@@ -202,12 +295,42 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                 .fillColor(0x220000FF)
                                 .strokeWidth(1)
                 );
-                mark = mMap.addMarker(new MarkerOptions().position(latLng).title(getResources().getString(R.string.msg_position)));
+                myMark = mMap.addMarker(new MarkerOptions().position(latLng).title(getResources().getString(R.string.msg_position)));
+
+                da.iniziaOsservazioneMap(loc, new DatiAttrazione.UpdateListener() {
+                    @Override
+                    public void listAttrazioniAggiornate() {
+                        List<Attrazione> list = da.getAttrazioniPerMap();
+                        Marker e = null;
+                        for (int i = 0; i < list.size(); i++) {
+                            switch (list.get(i).getCategoria()) {
+                                case "Bar & Pub":
+                                    e = mMap.addMarker(new MarkerOptions().position(new LatLng(list.get(i).getLat(), list.get(i).getLng())).title(list.get(i).getNome())
+                                            .icon(getMarkerIcon("#325438")));
+                                    break;
+                                case "Ristoranti & Pizzerie":
+                                    e = mMap.addMarker(new MarkerOptions().position(new LatLng(list.get(i).getLat(), list.get(i).getLng())).title(list.get(i).getNome())
+                                            .icon(getMarkerIcon("#ff7100")));
+                                    break;
+                                case "Cultura & Spettacolo":
+                                    e = mMap.addMarker(new MarkerOptions().position(new LatLng(list.get(i).getLat(), list.get(i).getLng())).title(list.get(i).getNome())
+                                            .icon(getMarkerIcon("#2de5ff")));
+                                    break;
+                                case "Cinema & Intrattenimento":
+                                    e = mMap.addMarker(new MarkerOptions().position(new LatLng(list.get(i).getLat(), list.get(i).getLng())).title(list.get(i).getNome())
+                                            .icon(getMarkerIcon("#ffe200")));
+                                    break;
+                            }
+                            marks.add(e);
+                        }
+                    }
+                });
+
                 //  myself.setDraggable(true);
                // mMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
             }
         });
-
+*/
 
 
     }

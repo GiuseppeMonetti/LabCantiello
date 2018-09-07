@@ -31,12 +31,8 @@ import e.giuseppemonetti.labcantiello.Attrazione;
  */
 public class DatiAttrazione extends Fragment {
 
-    public interface UpdateListener
-    {
-        void eventiAggiornati();
-    }
 
-    public interface UpdateListener2
+    public interface UpdateListener
     {
         void listAttrazioniAggiornate();
     }
@@ -90,7 +86,7 @@ public class DatiAttrazione extends Fragment {
                     elencoAttrazioni.get(i).setLng(d);
                 }
 
-                notifica.eventiAggiornati();
+                notifica.listAttrazioniAggiornate();
             }
 
             @Override
@@ -115,7 +111,36 @@ public class DatiAttrazione extends Fragment {
 
 
 
-    public void iniziaOsservazioneMap(final Location l1, final e.giuseppemonetti.labcantiello.Datasource.DatiAttrazione.UpdateListener2 notifica)
+    public void iniziaOsservazioneMap(final Location l1, final e.giuseppemonetti.labcantiello.Datasource.DatiAttrazione.UpdateListener notifica)
+    {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference();
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                attrazioniPerMap.clear();
+                Location l2;
+                for(DataSnapshot elemento : dataSnapshot.child("Coordinate").getChildren())
+                {
+                    l2 = new Location("");
+                    l2.setLatitude(elemento.child("lat").getValue(double.class));
+                    l2.setLongitude(elemento.child("lng").getValue(double.class));
+                    if(l2.distanceTo(l1)<2000)
+                    {
+                        attrazioniPerMap.add(new Attrazione(elemento.getKey(),l2.getLatitude(),l2.getLongitude(),dataSnapshot.child("Categoria").child(Integer.toString(elemento.child("cat").getValue(Integer.class))).child("nome").getValue(String.class)));
+                    }
+                }
+                notifica.listAttrazioniAggiornate();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+/*
+    public void aggiornaAttrazioniPerMap(final Location l1, final e.giuseppemonetti.labcantiello.Datasource.DatiAttrazione.UpdateListener n)
     {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference();
@@ -134,7 +159,7 @@ public class DatiAttrazione extends Fragment {
                         attrazioniPerMap.add(new Attrazione(elemento.getKey(),l2.getLatitude(),l2.getLongitude(),dataSnapshot.child("Categoria").child(Long.toString(elemento.child("cat").getValue(Long.class))).getValue(String.class)));
                     }
                 }
-                notifica.listAttrazioniAggiornate();
+                n.listAttrazioniAggiornate();
             }
 
             @Override
@@ -142,7 +167,7 @@ public class DatiAttrazione extends Fragment {
 
             }
         });
-    }
+    }*/
 
 
 

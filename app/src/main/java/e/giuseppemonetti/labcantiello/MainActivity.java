@@ -168,16 +168,4 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Check which request we're responding to
-        if (requestCode == MainFragment.REQUEST_ADDING_ATTRACTION) {
-
-
-            if (resultCode == RESULT_OK) {
-                Toast.makeText(this, R.string.addOk, Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
 }

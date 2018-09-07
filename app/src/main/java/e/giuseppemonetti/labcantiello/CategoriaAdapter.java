@@ -1,7 +1,9 @@
 package e.giuseppemonetti.labcantiello;
 
 import android.content.Context;
-import android.media.Image;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +11,16 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Giuseppe Monetti on 31/07/2018.
@@ -60,13 +69,13 @@ public class CategoriaAdapter extends BaseAdapter {
         //imposto i valori da visualizzare
         for(Categoria c : elencoCategorie)
         {
-            if(c.getKey()== i) vNomeCat.setText(c.getNomeCategoria());
+            if(c.getKey()== i)
+            {
+                vNomeCat.setText(c.getNomeCategoria());
+                Picasso.get().load(c.getIconURL()).into(vIcona);
+            }
+
         }
-
-
-
-        vIcona.setImageResource(getId("icon" + i, R.drawable.class));
-
 
         return view;
     }
