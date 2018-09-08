@@ -143,8 +143,8 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = findViewById(R.id.navBar);
         for (int i = 0; i < pagerAdapter.getCount(); i++)
             tabLayout.addTab(tabLayout.newTab().setText(pagerAdapter.getItemTabNameResourceId(i)));
-
         // Listner delle selezioni dei tab
+
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
 

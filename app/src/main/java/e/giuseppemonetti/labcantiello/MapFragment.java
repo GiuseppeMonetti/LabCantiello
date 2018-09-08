@@ -186,8 +186,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
             }
         };
-        loc = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,30000,5000,loclistener);
+        loc = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,6000,10,loclistener);
         final LatLng centercamera;
         if( loc != null) {
             centercamera = new LatLng(loc.getLatitude(), loc.getLongitude());
@@ -246,11 +246,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
             @Override
             public boolean onMyLocationButtonClick() {
-                LatLng centercamera = new LatLng(loc.getLatitude(),loc.getLongitude());
+                if(loc != null) {
+                    LatLng centercamera = new LatLng(loc.getLatitude(), loc.getLongitude());
 
 
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centercamera, 13.3f));
-
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centercamera, 13.3f));
+                }
                 return false;
             }
         });
