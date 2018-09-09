@@ -38,7 +38,7 @@ import e.giuseppemonetti.labcantiello.Datasource.DatiAttrazione;
 
 import static android.content.Context.LOCATION_SERVICE;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback {
+public class MapFragment extends SupportMapFragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private SupportMapFragment suppMap;
